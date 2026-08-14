@@ -1,25 +1,25 @@
-# Metamodel Pointer — Glossary Term
-# Auto-generated from OpenDEAM v0.2.1 (dea-architecture-framework, ADR-0002).
+# Metamodel Pointer — Concept
+# Auto-generated from OpenDEAM v0.4.0 (dea-architecture-framework, ADR-0004).
 # Do not edit manually — allocation changes go through the root model
 # (structural: ADR + minor bump; additive: PR + patch bump).
 metamodel:
-  version: v0.2.1
-  entity_id: dea:entity-glossary-term
-  class_alias: GT
-  layer: L2
-  building_block: L2-semantics
-  viewer_url: "https://technehub-labs.github.io/metamodel/?entity=GT"
+  version: v0.4.0
+  entity_id: dea:entity-concept
+  class_alias: CON
+  dimension: semantic-dimension
+  scope_layers: [L1, L2, L3, L4, L5]
+  viewer_url: "https://technehub-labs.github.io/metamodel/?entity=CON"
 
 catalog:
-  name: Glossary Term
-  repo: technehub-labs/dea-catalog-glossary
-  status: planned
+  name: Concept
+  repo: technehub-labs/dea-catalog-concepts
+  status: proposed
 
 description: |
-  A canonical business or technical term with a controlled definition.
+  A canonical, definable unit of meaning (business term or classification node) that other entities link to via defined_by. Merged from Glossary Term + Taxonomy Node in v0.4.0 (ADR-0004 D2) — a queryable concept graph, not a static glossary document. No longer allocated to a layer/building_block — belongs to orthogonal_allocators.semantic-dimension.
 
 links:
   metamodel_repo: https://github.com/technehub-labs/dea-metamodel
   root_model: https://github.com/technehub-labs/dea-architecture-framework
-  viewer: "https://technehub-labs.github.io/metamodel/?entity=GT"
-  github: https://github.com/technehub-labs/dea-catalog-glossary
+  viewer: "https://technehub-labs.github.io/metamodel/?entity=CON"
+  github: https://github.com/technehub-labs/dea-catalog-concepts
