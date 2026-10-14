@@ -1,0 +1,34 @@
+# Cardinal authorship-field registry (CR-BP-118b; this repo's slice).
+# Adding a new field here is a CR-level change; do not edit casually.
+# The dea-catalog-concepts repo shares the 118a field shape (CR-doc metadata only).
+# No per-repo extension is needed at this time; if entity records
+# or process records are added in the future carrying a different
+# authorship field (e.g. `actor:` ladder_passage entries as in
+# dea-catalog-business-capabilities), extend the fields list with
+# a new per-glob entry and a per-field prefix_match: true opt-in
+# for trailing-context values.
+
+fields:
+  - path: "**Owner**"                # CR doc metadata; first-30-lines
+    file_glob: "change-requests/CR-*.md"
+    kind: "metadata"
+  - path: "**Author**"               # CR doc metadata; first-30-lines
+    file_glob: "change-requests/CR-*.md"
+    kind: "metadata"
+
+allowlist:
+  - "Emmanuel A. Otchere"
+  - "TechNeHub Labs"
+
+# Agent / tool names that may never appear in an authorship-bearing field.
+# `eaojnr` is allowed as a historical record (user handle alone, no agent prefix).
+denylist:
+  - "Coder"
+  - "Agent"
+  - "Hermes"
+  - "Claude"
+  - "GPT"
+  - "Cline"
+  - "OpenAI"
+  - "MiniMax"
+  - "MiniMax-M3"
