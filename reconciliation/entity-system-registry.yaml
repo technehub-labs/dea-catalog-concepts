@@ -1,0 +1,50 @@
+# Entity System Registry (CR-CON-02; per the Conformance Standard CS-011)
+# Per-repo lightweight slice of the General Entity System. Data-driven
+# configuration for the entity-system gate. This repo has 0 entity
+# records at the time of CR landing; the registry is declared generically
+# (no profiles) so the gate is vacuously CONFORMANT (per the Stage 5
+# staging).
+
+envelope:
+  file_globs:
+    - "entities/**/*.yaml"
+  type_field: type
+  profiles: {}
+
+identity:
+  id_field: id
+  canonical_prefix: "dea:"
+  canonical_pattern: "^dea:concept-[a-z0-9-]+$"
+  legacy_prefix: "dea:"
+  legacy_pattern: "^dea:concept-[a-z0-9-]+$"
+  legacy_migration_map: "reconciliation/migration-id-map.yaml"
+
+relationships:
+  field: relationships
+  canonical_types: []
+  forbidden_types:
+    - part-of
+  cross_catalog_field: identity_scope
+
+lifecycle:
+  field: lifecycle
+  status_field: status
+  valid_states: []
+  terminal_states: []
+  transition_table: {}
+  provenance_field: provenance.change_history
+  provenance_required_keys:
+    - cr
+    - date
+    - change
+
+per_type_gates: []
+
+exceptions:
+  registry_path: reconciliation/normalization.yaml
+  verdict_key: verdict
+  verdict_value: review-retained
+  cr_key: cr
+  expiry_key: expiry
+  reviewer_key: reviewed_by
+  excepted_rules_key: excepted_rules
