@@ -6,6 +6,10 @@ repository is governed by change requests (`change-requests/`).
 
 ## [Unreleased]
 
+### CR-CON-02: Entity System Stage 5-6 (Concepts Slice)
+
+CON slice of the General Entity System institutionalisation (cross-repo cascade T7 of the umbrella programme). New `reconciliation/entity-system-registry.yaml` (per-repo; generic; no profiles; canonical pattern `^dea:concept-[a-z0-9-]+$`). New `scripts/check_entity_system.py` (5-rule umbrella gate; copied verbatim from `dea-catalog-processes`). New `tests/test_check_entity_system.py` (32 tests; 4 pilot-specific tests made generic for cross-repo portability; all pass). New `.github/workflows/validate-entity-system.yml` (CI). Live: gate vacuously CONFORMANT (no `entities/` directory). D-004 clean. 118a/b/c authorship gates remain CONFORMANT.
+
 ### CR-CON-01: Authorship Cardinal Rule (R1, R2) - Org-Wide Propagation Slice
 
 User directive 2026-10-13: "no `Coder` / `Agent` / agent or tool names in any
