@@ -652,3 +652,81 @@ def test_seeded_concepts_live_conformant():
     assert r.returncode == 0
     assert "CONFORMANT" in r.stdout
     assert "NON-CONFORMANT" not in r.stdout
+
+
+# --------------------------------------------------------------------------- #
+# Cross-catalog defines edges (CR-CON-04; 3)
+# --------------------------------------------------------------------------- #
+
+def test_defines_requires_catalog_identity_scope(tmp_path: Path):
+    """A defines edge with a non-catalog identity_scope fires ES-003."""
+    mod = _load_module()
+    reg = REGISTRY
+    rec = (
+        "id: dea:concept-foo\n"
+        "type: Concept\n"
+        "name: Foo\n"
+        "definition: x.\n"
+        "lifecycle:\n"
+        "  status: active\n"
+        "relationships:\n"
+        "  - relationship_type: defines\n"
+        "    target: capabilities:capability-x\n"
+        "    identity_scope: dea-catalog-concepts\n"
+        "provenance:\n"
+        "  change_history:\n"
+        "    - cr: CR-CON-04\n"
+        "      date: '2026-10-27'\n"
+        "      change: test.\n"
+    )
+    ents = tmp_path / "entities" / "concepts"
+    ents.mkdir(parents=True, exist_ok=True)
+    (ents / "f.yaml").write_text(rec)
+    mod.REGISTRY_PATH = reg
+    mod.EXCEPTIONS_PATH = tmp_path / "n.yaml"
+    findings = mod.evaluate(tmp_path)
+    es_003 = [f for f in findings if f["rule"] == "ES-003"]
+    assert any("identity_scope" in f["diagnostic"] for f in es_003), \
+        f"expected identity_scope finding, got: {es_003}"
+
+
+def test_defines_with_capability_scope_passes(tmp_path: Path):
+    """A defines edge scoped to a registered target catalog passes."""
+    mod = _load_module()
+    reg = REGISTRY
+    rec = (
+        "id: dea:concept-foo\n"
+        "type: Concept\n"
+        "name: Foo\n"
+        "definition: x.\n"
+        "lifecycle:\n"
+        "  status: active\n"
+        "relationships:\n"
+        "  - relationship_type: defines\n"
+        "    target: capabilities:capability-x\n"
+        "    identity_scope: dea-catalog-business-capabilities\n"
+        "provenance:\n"
+        "  change_history:\n"
+        "    - cr: CR-CON-04\n"
+        "      date: '2026-10-27'\n"
+        "      change: test.\n"
+    )
+    ents = tmp_path / "entities" / "concepts"
+    ents.mkdir(parents=True, exist_ok=True)
+    (ents / "f.yaml").write_text(rec)
+    mod.REGISTRY_PATH = reg
+    mod.EXCEPTIONS_PATH = tmp_path / "n.yaml"
+    findings = mod.evaluate(tmp_path)
+    assert findings == [], f"expected clean, got: {findings}"
+
+
+def test_live_customer_concept_has_cross_catalog_defines():
+    """The live customer record carries the CR-CON-04 defines edge."""
+    mod = _load_module()
+    recs = mod._walk_records(ROOT, mod._load_registry())
+    cust = next(r for _, r, _ in recs if r.get("id") == "dea:concept-customer")
+    defines = [rel for rel in cust.get("relationships", [])
+               if rel.get("relationship_type") == "defines"]
+    assert len(defines) == 1
+    assert defines[0]["target"] == "capabilities:capability-customer-management-f3n8wb"
+    assert defines[0]["identity_scope"] == "dea-catalog-business-capabilities"

@@ -6,6 +6,19 @@ repository is governed by change requests (`change-requests/`).
 
 ## [Unreleased]
 
+### CR-CON-04: Cross-Catalog Defines Wiring (Concepts -> Capabilities)
+
+First cross-catalog edge: `dea:concept-customer` now `defines`
+`capabilities:capability-customer-management-f3n8wb` scoped to
+`dea-catalog-business-capabilities` (the model's CON -> CAP governance
+edge). The registry's `defines` constraint gains
+`target_identity_scopes` limited to the capabilities and
+business-objects catalogs; a wrong-scope edge fires ES-003.
+`dea:concept-order` wiring deferred until an Order/Fulfilment
+capability is admitted. 3 new tests (38 entity-system tests total, all
+pass); gates remain CONFORMANT under `--strict`. Carrier:
+`change-requests/CR-CON-04-cross-catalog-defines.md`.
+
 ### CR-CON-03: First Concept Record Admission (Registry Enrichment + Pilot Seeding)
 
 First governed content: the entity-system registry's generic stubs are
