@@ -1,0 +1,8 @@
+# Migration ID map (T8 follow-on of the umbrella programme).
+# Stub: the Concepts repo is in the pre-migration namespace state
+# (canonical and legacy prefixes are both `dea:`). When T8 promotes
+# the org-wide canonical namespace, each record's id moves here:
+#   legacy_id: dea:concept-customer
+#   canonical_id: <org-wide canonical form>
+# Until then, the map is intentionally empty.
+migrations: []

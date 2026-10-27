@@ -623,3 +623,32 @@ def test_live_catalog_walker_skips_registry_file():
     for path, record, _ in recs:
         assert "entity-system-registry.yaml" not in str(path), \
             f"walker should skip the registry file, got: {path}"
+
+
+# --------------------------------------------------------------------------- #
+# Live seeded concept records (CR-CON-03; 3)
+# --------------------------------------------------------------------------- #
+
+def test_seeded_concepts_walked():
+    """The 2 seeded concept records are picked up by the walker."""
+    mod = _load_module()
+    recs = mod._walk_records(ROOT, mod._load_registry())
+    ids = sorted(r.get("id", "") for _, r, _ in recs)
+    assert "dea:concept-customer" in ids
+    assert "dea:concept-order" in ids
+
+
+def test_seeded_concepts_no_duplicate_ids():
+    """No duplicate-id findings across the seeded records."""
+    mod = _load_module()
+    findings = mod.evaluate(ROOT)
+    assert not [f for f in findings if "duplicate" in f.get("diagnostic", "")]
+
+
+def test_seeded_concepts_live_conformant():
+    """The live tree with the seeded records is fully CONFORMANT (blocking
+    posture; CR-CON-03 moves the gate from vacuous to non-vacuous pass)."""
+    r = _run()
+    assert r.returncode == 0
+    assert "CONFORMANT" in r.stdout
+    assert "NON-CONFORMANT" not in r.stdout

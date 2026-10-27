@@ -1,0 +1,19 @@
+id: dea:concept-customer
+type: Concept
+name: Customer
+definition: |
+  An individual or organisation that enters into a commercial relationship
+  with the enterprise to obtain products or services, and to whom an
+  obligation of service delivery and value exchange is owed.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: related-to
+    target: dea:concept-order
+    identity_scope: dea-catalog-concepts
+provenance:
+  change_history:
+    - cr: CR-CON-03
+      date: "2026-10-27"
+      change: Initial concept record (pilot admission).
