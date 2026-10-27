@@ -33,6 +33,9 @@ relationships:
   type_constraints:
     defines:
       source_types: [Concept]
+      target_identity_scopes:
+        - dea-catalog-business-capabilities
+        - dea-catalog-business-objects
     broader-than:
       source_types: [Concept]
     related-to:
