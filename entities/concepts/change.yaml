@@ -1,0 +1,19 @@
+id: dea:concept-change
+type: Concept
+name: Change
+definition: |
+  A deliberate, governed transition from a current to a target operational
+  state.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-change-management-hukdeq
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-05
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.

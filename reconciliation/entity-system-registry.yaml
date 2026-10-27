@@ -60,7 +60,9 @@ lifecycle:
     - date
     - change
 
-per_type_gates: []
+per_type_gates:
+  - type: Concept
+    gate: scripts/check_target_resolution.py
 
 exceptions:
   registry_path: reconciliation/normalization.yaml

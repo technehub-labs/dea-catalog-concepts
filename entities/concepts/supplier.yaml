@@ -1,0 +1,19 @@
+id: dea:concept-supplier
+type: Concept
+name: Supplier
+definition: |
+  An external organisation that provides goods or services to the enterprise
+  under a commercial supply arrangement.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-supplier-management-d6fuj4
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-05
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.

@@ -1,0 +1,46 @@
+# Target index (CR-CON-05): committed snapshot of the live record ids
+# in the dea-catalog-business-capabilities catalog, used by the
+# cross-catalog target-resolution gate. Refresh with:
+#   python3 scripts/check_target_resolution.py --rebuild /path/to/dea-catalog-business-capabilities
+# (the snapshot pins the target catalog at a commit; refresh it in the
+# same PR that wires new edges to newly admitted target records)
+snapshot:
+  catalog: dea-catalog-business-capabilities
+  repo: technehub-labs/dea-catalog-business-capabilities
+  commit: 22e99529b8be7bc568b13fec864d668aab6b9ff7
+  date: '2026-10-27'
+  record_count: 33
+records:
+- capabilities:candidate-epm-5fxren
+- capabilities:candidate-orgdesign-a7s8bf
+- capabilities:candidate-relmgmt-nu73v9
+- capabilities:capability-asset-management-judtwr
+- capabilities:capability-change-management-hukdeq
+- capabilities:capability-continuity-management-v3rn6u
+- capabilities:capability-customer-management-f3n8wb
+- capabilities:capability-enterprise-governance-uas48u
+- capabilities:capability-enterprise-performance-management-5fxren
+- capabilities:capability-facility-management-tx73hb
+- capabilities:capability-financial-resource-management-cd3c7c
+- capabilities:capability-financial-stewardship-c7xtfk
+- capabilities:capability-fixture-example-fxtrx2
+- capabilities:capability-idea-management-86dckf
+- capabilities:capability-information-management-6vjgdh
+- capabilities:capability-insight-management-ms4n9d
+- capabilities:capability-legal-matter-management-zzbd2u
+- capabilities:capability-marketing-xmc539
+- capabilities:capability-offering-management-6egkc8
+- capabilities:capability-operations-management-pm3w8k
+- capabilities:capability-organizational-design-vanefq
+- capabilities:capability-partner-management-cp3vdb
+- capabilities:capability-regulation-management-gya4d8
+- capabilities:capability-risk-management-h9uxdw
+- capabilities:capability-security-management-wmzc7c
+- capabilities:capability-sourcing-and-procurement-esucp4
+- capabilities:capability-strategic-planning-k3rz7a
+- capabilities:capability-strategy-formulation-sf7q2x
+- capabilities:capability-supplier-management-d6fuj4
+- capabilities:capability-technology-enablement-y6nkws
+- capabilities:capability-technology-management-maus5n
+- capabilities:capability-workforce-management-9e8d8s
+- capabilities:capability-workforce-planning-b43rhm

@@ -6,6 +6,23 @@ repository is governed by change requests (`change-requests/`).
 
 ## [Unreleased]
 
+### CR-CON-05: Vocabulary Growth + Cross-Catalog Target-Resolution Gate
+
+12 new concept records seeded (offering, partner, supplier, asset,
+risk, regulation, information, insight, workforce, facility,
+legal-matter, change), each wired with a `defines` edge to the live
+capability record whose `business_object` it defines (targets verified
+at snapshot commit `22e99529b8be`; 14 concepts total). New gate
+`scripts/check_target_resolution.py` (ES-006): dereferences every
+cross-catalog edge against `reconciliation/target-index.yaml`, a
+committed snapshot of the 33 live capability record ids; unresolvable
+targets and wrong scopes fire. Supports `--strict`, `--json`, and
+`--rebuild <target-checkout>` for snapshot refresh. Registered as the
+Concept per-type gate (ES-005 now verifies it exists). New CI workflow
+`validate-target-resolution.yml`. 9 new tests (68 total, all pass);
+entity-system, authorship, and allocation gates all CONFORMANT.
+Carrier: `change-requests/CR-CON-05-vocabulary-target-resolution.md`.
+
 ### CR-CON-04: Cross-Catalog Defines Wiring (Concepts -> Capabilities)
 
 First cross-catalog edge: `dea:concept-customer` now `defines`

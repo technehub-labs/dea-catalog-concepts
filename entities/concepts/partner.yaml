@@ -1,0 +1,19 @@
+id: dea:concept-partner
+type: Concept
+name: Partner
+definition: |
+  An external organisation that jointly creates or delivers value with the
+  enterprise under a collaborative arrangement.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-partner-management-cp3vdb
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-05
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.
