@@ -1,0 +1,19 @@
+id: dea:concept-enterprise
+type: Concept
+name: Enterprise
+definition: |
+  The organisation as a whole: its purpose, direction, and the scope of what
+  it is and chooses to be.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-strategy-formulation-sf7q2x
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-06
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.

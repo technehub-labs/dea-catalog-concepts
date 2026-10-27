@@ -1,0 +1,20 @@
+id: dea:concept-information-asset
+type: Concept
+name: Information Asset
+definition: |
+  An asset whose essential value is the information it carries, and which
+  therefore requires protection of its confidentiality, integrity, and
+  availability.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-security-management-wmzc7c
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-06
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.

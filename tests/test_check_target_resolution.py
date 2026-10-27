@@ -147,3 +147,64 @@ def test_cli_json_shape():
     import json
     data = json.loads(r.stdout)
     assert isinstance(data, list)
+
+
+# --------------------------------------------------------------------------- #
+# Drift check (CR-CON-06; ES-007)
+# --------------------------------------------------------------------------- #
+
+def _write_target_repo(root: Path, ids: list):
+    repo = root / "target"
+    ents = repo / "entities" / "v1-alpha"
+    ents.mkdir(parents=True)
+    for i, rid in enumerate(ids):
+        (ents / f"r{i}.yaml").write_text(f"id: {rid}\nname: x\n")
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(["git", "-C", str(repo), "config", "user.email", "t@example.com"], check=True)
+    subprocess.run(["git", "-C", str(repo), "config", "user.name", "t"], check=True)
+    subprocess.run(["git", "-C", str(repo), "add", "-A"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "init"], check=True)
+    return repo
+
+
+def test_drift_clean_when_live_matches_pin(tmp_path: Path):
+    mod = _load_module()
+    idx = mod._load_target_index()
+    repo = _write_target_repo(tmp_path, idx["records"])
+    findings, report = mod.check_drift(repo)
+    assert findings == []
+    assert report["drift"] is False
+    assert report["pinned_count"] == report["live_count"]
+
+
+def test_drift_fires_on_removed_pinned_record(tmp_path: Path):
+    mod = _load_module()
+    idx = mod._load_target_index()
+    live = [r for r in idx["records"] if r != "capabilities:capability-customer-management-f3n8wb"]
+    repo = _write_target_repo(tmp_path, live)
+    findings, report = mod.check_drift(repo)
+    es_007 = [f for f in findings if f["rule"] == "ES-007"]
+    assert any("customer-management" in f["record_id"] for f in es_007)
+    assert report["drift"] is True
+    assert "capabilities:capability-customer-management-f3n8wb" in report["removed_upstream"]
+
+
+def test_drift_removed_wired_target_flagged(tmp_path: Path):
+    mod = _load_module()
+    idx = mod._load_target_index()
+    live = [r for r in idx["records"] if r != "capabilities:capability-customer-management-f3n8wb"]
+    repo = _write_target_repo(tmp_path, live)
+    findings, _ = mod.check_drift(repo)
+    hit = [f for f in findings if f["record_id"] == "capabilities:capability-customer-management-f3n8wb"]
+    assert hit and "WIRED" in hit[0]["diagnostic"]
+
+
+def test_drift_added_upstream_informational_only(tmp_path: Path):
+    mod = _load_module()
+    idx = mod._load_target_index()
+    live = list(idx["records"]) + ["capabilities:capability-brand-new-aaa111"]
+    repo = _write_target_repo(tmp_path, live)
+    findings, report = mod.check_drift(repo)
+    assert findings == []
+    assert report["drift"] is False
+    assert "capabilities:capability-brand-new-aaa111" in report["added_upstream"]

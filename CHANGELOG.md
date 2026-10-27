@@ -6,6 +6,22 @@ repository is governed by change requests (`change-requests/`).
 
 ## [Unreleased]
 
+### CR-CON-06: Vocabulary Completion + Target Drift Detection
+
+The 15 remaining business objects are seeded (29 concepts total),
+closing the capabilities catalog's `business_object` coverage map:
+compound objects resolved to single concepts (market,
+information-asset), multi-capability objects wired with multiple
+`defines` edges (financial-resource). New drift check (ES-007) in
+`scripts/check_target_resolution.py --check-drift`: compares the
+pinned snapshot against a live target-catalog checkout; fires on
+removed pinned records (flagging wired targets) and treats new
+upstream records as informational. New scheduled workflow
+`validate-target-drift.yml` (weekly, Mondays 06:00 UTC + manual
+dispatch). 4 new drift tests (72 total, all pass); entity-system,
+target-resolution, authorship, and allocation gates all CONFORMANT.
+Carrier: `change-requests/CR-CON-06-vocabulary-completion-drift.md`.
+
 ### CR-CON-05: Vocabulary Growth + Cross-Catalog Target-Resolution Gate
 
 12 new concept records seeded (offering, partner, supplier, asset,

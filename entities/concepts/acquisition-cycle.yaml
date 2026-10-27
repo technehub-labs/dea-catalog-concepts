@@ -1,0 +1,19 @@
+id: dea:concept-acquisition-cycle
+type: Concept
+name: Acquisition Cycle
+definition: |
+  The governed end-to-end cycle of specifying, selecting, contracting, and
+  renewing what the enterprise acquires externally.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-sourcing-and-procurement-esucp4
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-06
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.

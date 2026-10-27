@@ -1,0 +1,36 @@
+name: validate-target-drift
+
+# CR-CON-06: Target Catalog Drift Detection (ES-007).
+# Scheduled job that clones the target catalog
+# (dea-catalog-business-capabilities) at its current HEAD and compares
+# the live record ids against the pinned snapshot
+# (reconciliation/target-index.yaml). Fails when:
+#   - a pinned record was removed upstream (stale pin; a wired target
+#     may dangle), or
+#   - a wired target does not exist in the live catalog.
+# New upstream records are informational only.
+# When this job fails: refresh the snapshot with
+#   python3 scripts/check_target_resolution.py --rebuild <checkout>
+# and, if a wired target was renamed/removed, rewire the affected
+# edges in the same PR.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  target-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: pip install pyyaml
+      - name: Clone target catalog
+        run: git clone --depth 1 https://github.com/technehub-labs/dea-catalog-business-capabilities.git /tmp/target-catalog
+      - name: Run Target Drift Check (ES-007)
+        run: python3 scripts/check_target_resolution.py --check-drift /tmp/target-catalog
