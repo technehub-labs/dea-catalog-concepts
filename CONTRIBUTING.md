@@ -1,4 +1,4 @@
-# Contributing to `dea-catalog-processes`
+# Contributing to `dea-catalog-concepts`
 
 Minimal. The cardinal rules govern the only contribution shape matters
 for this repository.
@@ -32,4 +32,4 @@ the registry in the same PR; the gate will block the change otherwise.
 - [docs/governance/cardinal-rules.md](docs/governance/cardinal-rules.md)
 - `reconciliation/authorship-fields.yaml`
 - `scripts/check_authorship.py` (gate [32])
-- `change-requests/CR-BP-118-authorship-cardinal-rule.md`
+- [change-requests/CR-CON-01-authorship-cardinal-rule.md](change-requests/CR-CON-01-authorship-cardinal-rule.md)

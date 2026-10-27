@@ -6,6 +6,22 @@ repository is governed by change requests (`change-requests/`).
 
 ## [Unreleased]
 
+### CR-CON-03: First Concept Record Admission (Registry Enrichment + Pilot Seeding)
+
+First governed content: the entity-system registry's generic stubs are
+enriched into a working Concept profile (required envelope fields,
+lifecycle state machine `proposed..retired`, relationship types
+`defines` / `broader-than` / `related-to` with source constraints). Two
+pilot concept records admitted (`dea:concept-customer`,
+`dea:concept-order`), each with full envelope, scoped `related-to` edge,
+and CR-named provenance. The entity-system gate now passes
+NON-VACUOUSLY (2 records walked, CONFORMANT under `--strict`).
+`reconciliation/migration-id-map.yaml` ships as an empty T8-prep stub.
+`CONTRIBUTING.md` stale references fixed (repo name, CR link). 3 new
+live-record tests (35 entity-system tests total, all pass); 118a/b/c
+authorship gates remain CONFORMANT. Carrier:
+`change-requests/CR-CON-03-first-concept-admission.md`.
+
 ### CR-CON-02: Entity System Stage 5-6 (Concepts Slice)
 
 CON slice of the General Entity System institutionalisation (cross-repo cascade T7 of the umbrella programme). New `reconciliation/entity-system-registry.yaml` (per-repo; generic; no profiles; canonical pattern `^dea:concept-[a-z0-9-]+$`). New `scripts/check_entity_system.py` (5-rule umbrella gate; copied verbatim from `dea-catalog-processes`). New `tests/test_check_entity_system.py` (32 tests; 4 pilot-specific tests made generic for cross-repo portability; all pass). New `.github/workflows/validate-entity-system.yml` (CI). Live: gate vacuously CONFORMANT (no `entities/` directory). D-004 clean. 118a/b/c authorship gates remain CONFORMANT.

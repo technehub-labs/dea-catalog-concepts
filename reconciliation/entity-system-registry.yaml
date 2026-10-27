@@ -9,7 +9,10 @@ envelope:
   file_globs:
     - "entities/**/*.yaml"
   type_field: type
-  profiles: {}
+  profiles:
+    Concept:
+      required_fields: [id, type, name, definition, lifecycle, provenance]
+      lifecycle_state_field: lifecycle.status
 
 identity:
   id_field: id
@@ -21,17 +24,33 @@ identity:
 
 relationships:
   field: relationships
-  canonical_types: []
+  canonical_types:
+    - defines
+    - broader-than
+    - related-to
   forbidden_types:
     - part-of
+  type_constraints:
+    defines:
+      source_types: [Concept]
+    broader-than:
+      source_types: [Concept]
+    related-to:
+      source_types: [Concept]
   cross_catalog_field: identity_scope
 
 lifecycle:
   field: lifecycle
   status_field: status
-  valid_states: []
-  terminal_states: []
-  transition_table: {}
+  valid_states: [proposed, planned, scaffold, active, deprecated, retired]
+  terminal_states: [retired]
+  transition_table:
+    proposed: [planned]
+    planned: [scaffold]
+    scaffold: [active]
+    active: [deprecated]
+    deprecated: [retired, active]
+    retired: []
   provenance_field: provenance.change_history
   provenance_required_keys:
     - cr

@@ -1,0 +1,19 @@
+id: dea:concept-order
+type: Concept
+name: Order
+definition: |
+  A request, confirmed and agreed with a customer, for the supply of
+  products or services at stated terms, which initiates fulfilment and
+  revenue recognition.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: related-to
+    target: dea:concept-customer
+    identity_scope: dea-catalog-concepts
+provenance:
+  change_history:
+    - cr: CR-CON-03
+      date: "2026-10-27"
+      change: Initial concept record (pilot admission).
