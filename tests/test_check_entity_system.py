@@ -717,7 +717,10 @@ def test_defines_with_capability_scope_passes(tmp_path: Path):
     mod.REGISTRY_PATH = reg
     mod.EXCEPTIONS_PATH = tmp_path / "n.yaml"
     findings = mod.evaluate(tmp_path)
-    assert findings == [], f"expected clean, got: {findings}"
+    # ES-005 is a global gate-existence check that resolves against the
+    # tmp tree (no scripts/ dir); only record-level findings are in scope.
+    record_findings = [f for f in findings if f["rule"] != "ES-005"]
+    assert record_findings == [], f"expected clean, got: {record_findings}"
 
 
 def test_live_customer_concept_has_cross_catalog_defines():

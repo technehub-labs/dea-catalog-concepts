@@ -1,0 +1,19 @@
+id: dea:concept-insight
+type: Concept
+name: Insight
+definition: |
+  A derived, decision-relevant understanding produced by analysing
+  information; the analytical output the enterprise acts on.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-insight-management-ms4n9d
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-05
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.

@@ -1,0 +1,32 @@
+name: validate-target-resolution
+
+# CR-CON-05: Cross-Catalog Target Resolution gate (ES-006).
+# Dereferences every cross-catalog defines edge against the committed
+# target index (reconciliation/target-index.yaml), a pinned snapshot of
+# the live record ids in dea-catalog-business-capabilities. An edge
+# pointing at a record that does not exist in the target catalog fails.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  target-resolution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+        run: pip install pyyaml
+      - name: Run Target Resolution gate (--strict)
+        run: python3 scripts/check_target_resolution.py --strict
+      - name: Run target-resolution gate unit tests
+        if: always()
+        run: |
+          python3 -m pip install --quiet pytest
+          python3 -m pytest tests/test_check_target_resolution.py -q

@@ -1,0 +1,19 @@
+id: dea:concept-regulation
+type: Concept
+name: Regulation
+definition: |
+  A binding external rule or obligation, issued by an authority, that
+  constrains how the enterprise may operate.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-regulation-management-gya4d8
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-05
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.
