@@ -1,4 +1,4 @@
-# Concepts (dea-catalog-concepts)
+# OpenDEA Concepts (dea-catalog-concepts)
 
 > DEA catalog for **Concepts** — OpenDEAM v0.4.0 (ADR-0004; renamed from `dea-catalog-glossary`, absorbs `dea-catalog-taxonomy`).
 
