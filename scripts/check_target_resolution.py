@@ -140,9 +140,8 @@ def evaluate(repo_root: Path = REPO_ROOT) -> list:
 # Rebuild (snapshot refresh)
 # --------------------------------------------------------------------------- #
 
-def _rebuild(target_repo: Path) -> int:
-    """Refresh reconciliation/target-index.yaml from a target catalog checkout."""
-    target_repo = Path(target_repo).resolve()
+def _snapshot_ids_from_repo(target_repo: Path) -> tuple[set, str, str]:
+    """Extract capability record ids + HEAD commit/date from a checkout."""
     ids = set()
     for path in target_repo.rglob("*.yaml"):
         if any(part in {".git", "node_modules", "__pycache__"} for part in path.parts):
@@ -151,13 +150,76 @@ def _rebuild(target_repo: Path) -> int:
         match = re.search(r"^id:\s*(capabilities:[A-Za-z0-9-]+)\s*$", content, re.M)
         if match:
             ids.add(match.group(1))
-    if not ids:
-        print(f"no capability record ids found under {target_repo}", file=sys.stderr)
-        return 2
     commit = subprocess.run(["git", "-C", str(target_repo), "rev-parse", "HEAD"],
                             capture_output=True, text=True).stdout.strip()
     date = subprocess.run(["git", "-C", str(target_repo), "log", "-1", "--format=%cs"],
                           capture_output=True, text=True).stdout.strip()
+    return ids, commit, date
+
+
+def check_drift(target_repo: Path) -> tuple[list, dict]:
+    """ES-007 (drift): compare the pinned snapshot against the live target catalog.
+
+    Findings fire when:
+    - a record the snapshot pins has been removed upstream (stale pin;
+      a wired target may now dangle), or
+    - a wired target is missing from the live catalog (the edge points
+    at a removed/renamed record).
+    New upstream records are reported as informational (not findings):
+    they only matter once an edge is wired to them.
+    """
+    target_repo = Path(target_repo).resolve()
+    live_ids, live_commit, live_date = _snapshot_ids_from_repo(target_repo)
+    index = _load_target_index()
+    pinned_ids = set(index.get("records", []) or [])
+    pinned_commit = index.get("snapshot", {}).get("commit", "")
+
+    registry = _load_registry()
+    records = _walk_records(REPO_ROOT, registry)
+    wired_targets = set()
+    for _, record in records:
+        for _, rel in _cross_catalog_edges(record, registry):
+            if rel.get("target"):
+                wired_targets.add(rel["target"])
+
+    findings = []
+    removed = sorted(pinned_ids - live_ids)
+    for rid in removed:
+        detail = " (WIRED: an edge in this catalog points at it)" if rid in wired_targets else ""
+        findings.append({
+            "rule": "ES-007", "record_id": rid,
+            "diagnostic": (f"pinned target record no longer exists upstream "
+                           f"(live HEAD {live_commit[:12]}; pinned {pinned_commit[:12]}){detail}"),
+        })
+    for rid in sorted(wired_targets - live_ids):
+        if rid not in removed:
+            findings.append({
+                "rule": "ES-007", "record_id": rid,
+                "diagnostic": (f"wired target does not exist in the live target catalog "
+                               f"(live HEAD {live_commit[:12]})"),
+            })
+
+    report = {
+        "pinned_commit": pinned_commit,
+        "live_commit": live_commit,
+        "live_date": live_date,
+        "pinned_count": len(pinned_ids),
+        "live_count": len(live_ids),
+        "added_upstream": sorted(live_ids - pinned_ids),
+        "removed_upstream": removed,
+        "wired_targets": len(wired_targets),
+        "drift": bool(removed or (wired_targets - live_ids)),
+    }
+    return findings, report
+
+
+def _rebuild(target_repo: Path) -> int:
+    """Refresh reconciliation/target-index.yaml from a target catalog checkout."""
+    target_repo = Path(target_repo).resolve()
+    ids, commit, date = _snapshot_ids_from_repo(target_repo)
+    if not ids:
+        print(f"no capability record ids found under {target_repo}", file=sys.stderr)
+        return 2
     doc = {
         "snapshot": {
             "catalog": "dea-catalog-business-capabilities",
@@ -196,10 +258,27 @@ def main(argv: list | None = None) -> int:
                         help="Emit findings as JSON.")
     parser.add_argument("--rebuild", metavar="TARGET_REPO",
                         help="Refresh the target index from a target catalog checkout.")
+    parser.add_argument("--check-drift", metavar="TARGET_REPO",
+                        help="Compare the pinned snapshot against a live target catalog checkout; "
+                             "exit 1 if pinned records were removed upstream or a wired target is missing live.")
     args = parser.parse_args(argv)
 
     if args.rebuild:
         return _rebuild(args.rebuild)
+
+    if args.check_drift:
+        findings, report = check_drift(Path(args.check_drift))
+        print(f"Target Drift Check: pinned {report['pinned_commit'][:12]} "
+              f"({report['pinned_count']} records) vs live {report['live_commit'][:12]} "
+              f"({report['live_count']} records)")
+        if report["added_upstream"]:
+            print(f"  informational: {len(report['added_upstream'])} new record(s) upstream: "
+                  f"{', '.join(report['added_upstream'])}")
+        for f in findings:
+            print(f"ES-007 {f['record_id']}: {f['diagnostic']}")
+        verdict = "NON-CONFORMANT" if findings else "CONFORMANT"
+        print(f"Target Drift Check (CR-CON-06; ES-007): {verdict}")
+        return 1 if findings else 0
 
     findings = evaluate()
     if args.json:

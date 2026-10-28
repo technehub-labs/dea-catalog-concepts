@@ -1,0 +1,23 @@
+id: dea:concept-financial-resource
+type: Concept
+name: Financial Resource
+definition: |
+  The enterprise's money and money-equivalent resources: funds, budgets, and
+  financial commitments available to be allocated, stewarded, and accounted
+  for.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-financial-resource-management-cd3c7c
+    identity_scope: dea-catalog-business-capabilities
+  - relationship_type: defines
+    target: capabilities:capability-financial-stewardship-c7xtfk
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-06
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.

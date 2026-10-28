@@ -1,0 +1,19 @@
+id: dea:concept-market
+type: Concept
+name: Market
+definition: |
+  The demand side of the enterprise's context: the customers, prospects, and
+  segments whose needs offerings answer.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-marketing-xmc539
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-06
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.

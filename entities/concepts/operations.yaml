@@ -1,0 +1,19 @@
+id: dea:concept-operations
+type: Concept
+name: Operations
+definition: |
+  The ongoing execution of the enterprise's productive activity: the
+  repeatable day-to-day running that turns intent into delivery.
+lifecycle:
+  status: active
+  transition: scaffold -> active
+relationships:
+  - relationship_type: defines
+    target: capabilities:capability-operations-management-pm3w8k
+    identity_scope: dea-catalog-business-capabilities
+provenance:
+  change_history:
+    - cr: CR-CON-06
+      date: "2026-10-27"
+      change: Initial concept record; defines edge(s) wired to the live
+        capability records in dea-catalog-business-capabilities.
